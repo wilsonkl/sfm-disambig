@@ -6,6 +6,15 @@ function [] = convertNvmFileToTracksAndFov(...
 % Read in an NVM file (http://ccwu.me/vsfm/) and convert it to a
 % tracks and an fov file.
 %
+% NOTE: This function assumes that the input NVM file specifies the
+%       image paths relative to the NVM file's location on disk (which
+%       is the default behavior of VisualSFM), and that the images do
+%       exist at these paths.
+%
+% input_nvm_path     = path to input NVM file
+% output_tracks_path = path where output tracks file will be written
+% output_fov_path    = path where output fov file will be written
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     [camera_data, ~, point_observations] = parse_nvm(input_nvm_path, true);
@@ -34,6 +43,7 @@ function [] = convertNvmFileToTracksAndFov(...
     
     fclose(fov_file);
 
+end % function convertNvmFileToTracksAndFov
 
 function [camera_data, point_data, point_observations] = parse_nvm(...
     nvm_filepath, read_image_dimensions)
@@ -143,6 +153,8 @@ end % function parse_nvm
 
 function [R] = quaternion_to_matrix(quat)
 
+    % http://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Conversion_to_and_from_the_matrix_representation
+    
     a = quat(1);
     b = quat(2);
     c = quat(3);
@@ -153,4 +165,3 @@ function [R] = quaternion_to_matrix(quat)
          2*b*d - 2*a*c,         2*c*d + 2*a*b,         a^2 - b^2 - c^2 + d^2];
 
 end % function quaternion_to_matrix
-
