@@ -27,12 +27,14 @@ NUM_COMPONENTS = 6;
 opt_useParallel = false; % should we use a local pool if available?
 opt_tracksSource = 'tracksfile'; % normal option: pre-sfm tracks
 % opt_tracksSource = 'bundlefile'; % read in tracks from a bundle file
+% opt_tracksSource = 'nvmfile'; % read in tracks from an NVM file
 
 %%% DATA PATHS %%%
 dataset = '../datasets/Seville';
 tracksfile = [dataset '/tracks.txt'];
 fovfile    = [dataset '/fov.txt'   ];
 bundlefile = [dataset '/bundle.out'];
+nvmfile    = [dataset '/model.nvm' ];
 outdir = '../output';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -43,15 +45,18 @@ end
 
 % read input data
 fprintf('Reading in data\n');
-fov = readFovFile(fovfile);
 if strcmp(opt_tracksSource, 'tracksfile')
     biadjmat = readTracksFile(tracksfile);
 elseif strcmp(opt_tracksSource, 'bundlefile')
     bundledata = readBundleFile(bundlefile);
     biadjmat = bundledata2biadjmat(bundledata);
+elseif strcmp(opt_tracksSource, 'nvmfile')
+    convertNvmFileToTracksAndFov(nvmfile, tracksfile, fovfile);
+    biadjmat = readTracksFile(tracksfile);
 else
     error('Unknown tracks source');
 end
+fov = readFovFile(fovfile);
 
 % is the parallel computing toolbox available?
 % do we need to start it up?
