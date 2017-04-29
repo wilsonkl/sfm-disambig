@@ -92,7 +92,6 @@ void mexFunction(int nlhs, mxArray *plhs[ ],
             fprintf(file,"\n");
             track_start = i;
             prev_track = curr_track;
-            getchar();
         }
 
     }

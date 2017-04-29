@@ -60,9 +60,8 @@ fov = readFovFile(fovfile);
 
 % is the parallel computing toolbox available?
 % do we need to start it up?
-if license('test','distrib_computing_toolbox') && ...
-        opt_useParallel && matlabpool('size') == 0
-    matlabpool open local
+if opt_useParallel && license('test','distrib_computing_toolbox')
+    gcp
 end
 
 fprintf('disambiguating\n');

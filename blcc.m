@@ -51,9 +51,13 @@ function [blccU, blccV] = blcc(G,u,v,sigma)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % is the parallel computing toolbox avaiable? Are there nodes running?
-if license('test','distrib_computing_toolbox') && ...
-        matlabpool('size') > 1
-    optParallel = true;
+if license('test','distrib_computing_toolbox')
+    p = gcp('nocreate');
+    if isempty(p)
+        optParallel = false;
+    else
+        optParallel = true;
+    end
 else
     optParallel = false;
 end

@@ -55,7 +55,14 @@ while maxScore > 0 && fractionUncovered > EPSILON
     imgSubset(end+1) = maxImg; %#ok<AGROW>
 
     neighbors = find(biadjmat(:,maxImg));
-    uncoveredNeighbors(maxImg) = uncoveredNeighbors(maxImg) - nnz(remainingCover(neighbors) == 1);
+    %uncoveredNeighbors(maxImg) = uncoveredNeighbors(maxImg) - nnz(remainingCover(neighbors) == 1);
+    % update uncoveredNeighbors
+    just_covered_nbrs = find(biadjmat(:, maxImg) & (remainingCover == 1));
+    for i=1:length(just_covered_nbrs)
+        t = just_covered_nbrs(i);
+        uncoveredNeighbors(biadjmat(t, :) > 0) = uncoveredNeighbors(biadjmat(t, :) > 0) - 1;
+    end
+
     remainingCover(neighbors) = remainingCover(neighbors) - 1;
     remainingCover(remainingCover < 0) = 0;
     fov(maxImg) = 0;
